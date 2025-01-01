@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 const RoomRoutes = require('./routes/RoomRoutes');
+const UserRoutes = require('./routes/UserRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -20,6 +21,7 @@ app.use(bodyParser.json());
 
 // API Routes
 app.use('/room', RoomRoutes);
+app.use('/user', UserRoutes);
 
 
 
