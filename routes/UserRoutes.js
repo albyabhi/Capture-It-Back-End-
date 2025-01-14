@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require('../models/UserSchema'); // Import the User model
+const verifyToken = require('../Middleware/verifyToken');
 
 // Secret key for JWT token (should be stored in environment variables for security)
 const JWT_SECRET = process.env.JWT_SECRET;
@@ -50,6 +51,22 @@ router.post('/login', async (req, res) => {
   } catch (error) {
     console.error('Error saving user:', error);
     return res.status(500).json({ message: 'An error occurred while saving the user.', error });
+  }
+});
+
+
+router.get('/user-data', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    return res.status(200).json({ message: 'User data retrieved successfully.', user });
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return res.status(500).json({ message: 'An error occurred while fetching user data.', error });
   }
 });
 

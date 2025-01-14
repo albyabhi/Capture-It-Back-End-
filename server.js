@@ -1,10 +1,11 @@
-const express = require('express');
 const dotenv = require('dotenv');
+const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 const RoomRoutes = require('./routes/RoomRoutes');
 const UserRoutes = require('./routes/UserRoutes');
+const ImageRoutes = require('./routes/ImageRoutes')
 
 // Load environment variables
 dotenv.config();
@@ -22,6 +23,8 @@ app.use(bodyParser.json());
 // API Routes
 app.use('/room', RoomRoutes);
 app.use('/user', UserRoutes);
+app.use('/image', ImageRoutes);
+
 
 
 
