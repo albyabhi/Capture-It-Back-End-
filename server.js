@@ -1,11 +1,10 @@
 const dotenv = require('dotenv');
 const express = require('express');
 const cors = require('cors');
-const bodyParser = require('body-parser');
 const connectDB = require('./config/db');
 const RoomRoutes = require('./routes/RoomRoutes');
 const UserRoutes = require('./routes/UserRoutes');
-const ImageRoutes = require('./routes/ImageRoutes')
+const ImageRoutes = require('./routes/ImageRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -17,16 +16,23 @@ connectDB();
 const app = express();
 
 // Middleware
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true }));
 
 // API Routes
 app.use('/room', RoomRoutes);
 app.use('/user', UserRoutes);
 app.use('/image', ImageRoutes);
 
-
-
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok', timestamp: new Date().toISOString() });
+});
 
 // Start the server
 const PORT = process.env.PORT || 5000;
