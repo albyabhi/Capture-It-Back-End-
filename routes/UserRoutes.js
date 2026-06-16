@@ -89,3 +89,29 @@ router.get('/fetch-by-id/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+
+// ============================================================
+// PURPOSE: Handles user login, authentication, and profile retrieval.
+// HOW IT WORKS:
+//   This file defines 3 API endpoints:
+//
+//   POST /login:
+//     1. Receives fullName and eventCode from the request body.
+//     2. Checks if a user with that name+code already exists.
+//     3. If yes: generates a JWT token (valid for 1 hour) and returns it.
+//     4. If no: creates a new user, then generates and returns a JWT token.
+//     5. The JWT token contains the userId and is used to identify the
+//        user in future requests.
+//
+//   GET /user-data (protected - requires valid JWT):
+//     1. verifyToken middleware extracts userId from the JWT.
+//     2. Looks up the user by that ID and returns their data.
+//
+//   GET /fetch-by-id/:id:
+//     1. Takes a user ID from the URL.
+//     2. Finds and returns that user's data (no auth required).
+//
+//   Flow: Guest joins room -> enters name + room code -> gets token ->
+//         token is sent with all future requests for auth.
+// ============================================================

@@ -26,3 +26,17 @@ const UserSchema = new mongoose.Schema(
 // Create and export the User model
 const User = mongoose.model('User', UserSchema);
 module.exports = User;
+
+
+// ============================================================
+// PURPOSE: Defines the structure of a "User" in the database.
+// HOW IT WORKS:
+//   A User represents someone who joined an event room. It has:
+//   - fullName: The person's name (e.g., "John Smith").
+//   - eventCode: The room code they joined (links them to a room).
+//   - no_photos: How many photos they can still upload (starts at 25).
+//   - timestamps: Auto-creates "createdAt" and "updatedAt" fields.
+//   Mongoose creates a "users" collection in MongoDB. The no_photos
+//   field is decremented each time the user uploads images, acting
+//   as a per-user upload quota.
+// ============================================================

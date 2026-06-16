@@ -69,3 +69,25 @@ router.get('/check-room/:eventCode', async (req, res) => {
 
 
 module.exports = router;
+
+
+// ============================================================
+// PURPOSE: Handles creating event rooms and checking if a room exists.
+// HOW IT WORKS:
+//   This file defines 2 API endpoints:
+//
+//   POST /create:
+//     1. Receives eventName and ownerName from the request body.
+//     2. Generates a random 6-character code (e.g., "Ab3x9K") using
+//        letters and numbers.
+//     3. Creates a Room document and saves it to MongoDB.
+//     4. Returns the saved room (including the room_code) to the client.
+//
+//   GET /check-room/:eventCode:
+//     1. Takes a room code from the URL (e.g., /check-room/Ab3x9K).
+//     2. Looks up the database for a room with that code.
+//     3. If found, returns the room details. If not, returns 404.
+//
+//   Flow: Host creates room -> gets code -> shares code with guests ->
+//         guests use code to check-room and join.
+// ============================================================

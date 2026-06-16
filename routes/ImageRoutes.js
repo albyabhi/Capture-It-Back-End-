@@ -93,3 +93,30 @@ router.get('/fetchImages/:roomCode', async (req, res) => {
 
 
 module.exports = router;
+
+
+// ============================================================
+// PURPOSE: Handles uploading images to the cloud and fetching images for a room.
+// HOW IT WORKS:
+//   This file defines 2 API endpoints:
+//
+//   POST /upload (protected - requires JWT + rate limited to 30 req/min):
+//     1. verifyToken checks the user is logged in.
+//     2. uploadLimiter blocks users who exceed 30 requests per minute.
+//     3. multer saves uploaded files to the local uploads/ folder (max 10 files).
+//     4. Checks the user's no_photos quota - rejects if they hit the limit.
+//     5. Uploads each file to Cloudinary (cloud storage) under "capture-it" folder.
+//     6. Saves an ImageUpload record in MongoDB for each image.
+//     7. Decrements the user's no_photos count by the number of files uploaded.
+//     8. Deletes the temporary files from uploads/ (cleanup).
+//     9. Returns success message.
+//
+//   GET /fetchImages/:roomCode:
+//     1. Takes a room code from the URL.
+//     2. Finds all ImageUpload records for that room.
+//     3. Populates the "user" field with the uploader's name.
+//     4. Sorts by timestamp (newest first) and returns the list.
+//
+//   Flow: User selects photos -> upload hits server -> multer saves temp ->
+//         Cloudinary stores permanently -> DB tracks metadata -> temp deleted.
+// ============================================================
