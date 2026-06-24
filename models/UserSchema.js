@@ -17,6 +17,11 @@ const UserSchema = new mongoose.Schema(
       type: Number,
       default: 25, // Default value is 25
     },
+    accountId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Account',
+      default: null,
+    },
   },
   {
     timestamps: true, // Adds createdAt and updatedAt fields automatically

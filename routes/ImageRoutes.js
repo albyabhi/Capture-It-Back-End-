@@ -80,10 +80,6 @@ router.get('/fetchImages/:roomCode', async (req, res) => {
       .populate('user', 'fullName')
       .sort({ timestamp: -1 });
 
-    if (images.length === 0) {
-      return res.status(404).json({ message: 'No images found for this room code' });
-    }
-
     res.status(200).json(images);
   } catch (error) {
     console.log('Error fetching images:', error);

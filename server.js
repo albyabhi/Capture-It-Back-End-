@@ -5,6 +5,7 @@ const connectDB = require('./config/db');
 const RoomRoutes = require('./routes/RoomRoutes');
 const UserRoutes = require('./routes/UserRoutes');
 const ImageRoutes = require('./routes/ImageRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 // Load environment variables
 dotenv.config();
@@ -16,8 +17,18 @@ connectDB();
 const app = express();
 
 // Middleware
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000,http://localhost:5173')
+  .split(',').map(s => s.trim());
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      callback(null, true);
+    } else {
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
+    }
+  },
+  credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -28,6 +39,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/room', RoomRoutes);
 app.use('/user', UserRoutes);
 app.use('/image', ImageRoutes);
+app.use('/auth', authRoutes);
 
 // Health check endpoint
 app.get('/health', (req, res) => {

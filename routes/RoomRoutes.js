@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const router = express.Router();
-const Room = require('../models/RoomSchema');  
+const Room = require('../models/RoomSchema');
+const verifyAccountToken = require('../Middleware/verifyAccountToken');  
 
 // Function to generate a random 6-character room code (letters and numbers)
 function generateRoomCode() {
@@ -14,7 +15,7 @@ function generateRoomCode() {
   return roomCode;
 }
 
-router.post('/create', async (req, res) => {
+router.post('/create', verifyAccountToken, async (req, res) => {
     const { eventName, ownerName } = req.body;
   
     // Generate a random 6-digit room code
@@ -33,6 +34,7 @@ router.post('/create', async (req, res) => {
     const room = new Room({
       event_name: eventName,
       owner_name: ownerName,
+      owner: req.accountId,
       room_code: roomCode,
       created_date: createdDate,
     });

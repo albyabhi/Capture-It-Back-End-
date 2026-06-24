@@ -10,6 +10,11 @@ const RoomSchema = new mongoose.Schema({
     type: String,
     required: true, 
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account',
+    default: null,
+  },
   room_code: {
     type: String,
     required: true,  
